@@ -106,14 +106,14 @@
 
   If there are no variations, returns an empty vector."
   [useful-fragment]
-  (let [headword      (first useful-fragment)
+  (let [headword      (str/trim (first useful-fragment))
         variants      (-> (nth useful-fragment 2)
                           (str/split #"\.")
                           (first)
                           (str/split #";")
                           (str/trim))
         first-variant (str headword " " (first variants))]
-    first-variant))
+    first-variant))  ;; TODO return all variants.
 
 (defn translation
   "Takes a useful fragment (see below) and pulls out translation."
