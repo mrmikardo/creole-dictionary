@@ -167,3 +167,26 @@
   (-> (h/parse fragment)
       (h/as-hickory)
       (entry-from-hickory)))
+
+;;
+;; Main entry point
+;;
+
+(def dictionary-file "/Users/jackie/Documents/creole_dictionary/src/data/dlc.html")
+
+(defn load-dictionary
+  "Returns a vector of maps where each map is a complete dictionary entry."
+  []
+  (let [data (-> (slurp dictionary-file)
+                 (h/parse)
+                 (h/as-hickory))]
+    ;; Although the dictionary HTML isn't correct HTML (doesn't feature e.g. enclosing
+    ;; <html> or <body> tags, amongst others), hickory automatically adds in a bunch
+    ;; of meta tags that we strip out below.
+    (-> data
+        (second)
+        (second)
+        (first)
+        (:content)
+        (second)
+        (:content))))
