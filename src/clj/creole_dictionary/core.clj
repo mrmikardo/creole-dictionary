@@ -158,7 +158,7 @@
                             (:content))
         headword        (str/trim (first useful-fragment))
         part-of-speech  (:content (second useful-fragment))  ;; TODO convert POS strings to something more meaningful.
-        variations      (variations useful-fragment)
+        ;;variations      (variations useful-fragment)  ;; TODO fix this.
         translation     (translation useful-fragment)
         examples        (examples-and-attestations useful-fragment)]
     (DictionaryEntry. headword part-of-speech variations translation examples)))
