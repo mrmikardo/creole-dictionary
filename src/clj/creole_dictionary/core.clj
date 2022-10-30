@@ -129,17 +129,21 @@
                           (first)
                           (:content)
                           (first))
-        trans         (str/trim (last example))
-        attestation   (first (re-find #"\([A-Z][A-Z]( [0-9]+)?\)|gen\." trans))]  ;; TODO strip parens off of attestation code.
+        match         (re-seq #"(?s)[\sA-Za-z\.,'’;:]+|\(.*\)" (second example))
+        trans         (str/trim (first match))
+        attestation   (str/replace (second match)  #"\(|\)" "")]
     {:example parsed-ex
-     :translation trans  ;; TODO drop the attestation code from the trans.
+     :translation trans
      :attestation attestation}))
 
 (defn examples-and-attestations
-  "Takes a useful fragment (see below) and returns a map of examples and the code/place of attestation."
+  "Takes a useful fragment (see below) and returns a map of examples and the code/place of attestation.
+
+  Each example is given in Creole with an English translation."
   [useful-fragment]
-  (-> (drop 3 useful-fragment)  ;; Anything after the 3rd element is an examples. There can be many examples per headword.
-      (mapv parse-example)))
+  (->> (drop 3 useful-fragment)  ;; Anything after the 3rd element is an example. There may be multiple examples per headword.
+       (partition 2)  ;; Group each example with its English rendering.
+       (mapv parse-example)))
 
 (defn entry-from-hickory
   "Takes a fragment parsed into hickory and munges to a DictionaryEntry."
