@@ -97,6 +97,7 @@
 ;; Methods
 ;;
 
+;; TODO rename to `variants`.
 (defn variations
   "Takes a useful fragment (see below) and pulls out variations.
 
