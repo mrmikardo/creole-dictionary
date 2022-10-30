@@ -166,5 +166,4 @@
 (defn parse [fragment]
   (-> (h/parse fragment)
       (h/as-hickory)
-      (entry-from-hickory))
-)
+      (entry-from-hickory)))
