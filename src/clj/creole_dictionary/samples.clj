@@ -23,6 +23,12 @@
        "<p>aflije <em>adj.</em> (CA). Paralyzed, crippled; paralysé, estropié. <em>Li tou aflije. Li pa kapab sèrvi so lamen. Li pa kapab leve. Aryen travay pa.</em> He is completely paralyzed. He can’t use his hands. He can’t stand up. Nothing works. (CA); <em>Mo okipe apre mo pèr. Li aflije.</em> I take care of my dad. He’s crippled. (CA)</p>")
       (h/as-hickory)))
 
+;; A sample with multiple different lexicographic variants.
+(def multiple-variants
+  (-> (h/parse
+       "<p>abitud<sup>2</sup> <em>v.aux.</em> (PC; BT); labitid (CA; PC); abitchid, abitchud (CA), labitchid, abitid, abitye, abitche (NE); labitud (PC). 1. To be used to, accustomed to; avoir l’habitude de. <em>Ye pa abitchud tande moun parle kreyol.</em> They are not used to hearing people speak Creole. (CA) 2. [Past habitual]. Used to; (verbe à l’imparfait). <em>Ondon le ton-la nou t abitchud kouri peche.</em> In those days we used to go fishing. (NE); <em>Mo t abitchid fime me mo fe pi sa.</em> I used to smoke but I don’t do that anymore. (NE) REM: With the preverbal marker ‘te’, this indicates past habitual.</p><p>abitudmon <em>adv.</em> (BT); habitudman, bitudmon, bitudman (BT). Usually; d’habitude. <em>Abitudmon le vyey fonm lonton pase te bouyi de chavrèt.</em> Usually, old women long ago would boil shrimp. (BT); <em>Bitudman</em>, <em>leu lanm a enn pyòch e drwòt konm sa.</em> Usually, the blade of a hoe is straight like that. (BT)</p>")
+      (h/as-hickory)))
+
 ;; A sample containing usage examples dated prior to 1960. In the print dictionary, such examples
 ;; are separated from more modern ones with the use of a "lonzenge" or diamond-like symbol.
 (def pre-1960-examples

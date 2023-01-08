@@ -6,7 +6,7 @@
 ;; Records & constants
 ;;
 
-(defrecord DictionaryEntry [headword part-of-speech translation examples])
+(defrecord DictionaryEntry [headword part-of-speech variants translation examples])
 
 ;; TODO a neat way of pulling the attestation code out of the example would be to
 ;; map the variant-codes into a set of RegEx patterns that could be lazily applied
@@ -97,23 +97,31 @@
 ;; Methods
 ;;
 
-;; TODO rename to `variants`.
-(defn variations
-  "Takes a useful fragment (see below) and pulls out variations.
+(defn variants
+  "Takes a useful fragment (see below) and pulls out variants.
 
-  Variations are stored as a vector of maps, which contain the
+  Variants are stored as a vector of maps, which contain the
   variation and the place of attestation (see place codes above).
 
-  If there are no variations, returns an empty vector."
+  If there are no variants, returns an empty vector."
   [useful-fragment]
-  (let [headword      (str/trim (first useful-fragment))
-        variants      (-> (nth useful-fragment 2)
-                          (str/split #"\.")
-                          (first)
-                          (str/split #";")
-                          (str/trim))
-        first-variant (str headword " " (first variants))]
-    first-variant))  ;; TODO return all variants.
+  (let [headword       (str/trim (first useful-fragment))
+        variants-ix    (inc
+                        (first (keep-indexed
+                                ;; hairy function -- find the first hickory element _after_
+                                ;; the element which contains the part-of-speech; we know
+                                ;; that this element contains the variations (if any).
+                                (fn [idx elem] (if  (and (map? elem) (contains? elem :type) (not= (:tag elem) :sup)) idx)) useful-fragment)))
+        maybe-variants (nth useful-fragment variants-ix)]
+    (if (str/blank? maybe-variants)
+      ;; no variants -- return empty vector
+      []
+      ;; hairy regex -- parse variants
+      (let [matches (re-seq #"(?<=(;|,)\s)[\.a-zA-Z0-9,!? ]+\s\([A-Z]{2}((?:;)\s[A-Z]{2})?\)" (str/trim maybe-variants))]
+        ;; map out 'dud' variants. For example, the above matcher could return
+        ;; ["labitid (CA; PC)" ";" "; PC"] as a valid result. We only ever care
+        ;; about the first element of the returned vector.
+        (mapv first matches)))))
 
 (defn translation
   "Takes a useful fragment (see below) and pulls out translation."
@@ -158,10 +166,10 @@
                             (:content))
         headword        (str/trim (first useful-fragment))
         part-of-speech  (:content (second useful-fragment))  ;; TODO convert POS strings to something more meaningful.
-        ;;variations      (variations useful-fragment)  ;; TODO fix this.
+        variants        (variants useful-fragment)
         translation     (translation useful-fragment)
         examples        (examples-and-attestations useful-fragment)]
-    (DictionaryEntry. headword part-of-speech translation examples)))
+    (DictionaryEntry. headword part-of-speech variants translation examples)))
 
 ;; TODO it would be nicer just to do this in the body of `entry-from-hickory`
 ;; using `letfn`.
