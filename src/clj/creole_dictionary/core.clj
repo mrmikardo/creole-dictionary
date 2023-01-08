@@ -6,7 +6,7 @@
 ;; Records & constants
 ;;
 
-(defrecord DictionaryEntry [headword part-of-speech variations translation examples])
+(defrecord DictionaryEntry [headword part-of-speech translation examples])
 
 ;; TODO a neat way of pulling the attestation code out of the example would be to
 ;; map the variant-codes into a set of RegEx patterns that could be lazily applied
@@ -161,7 +161,7 @@
         ;;variations      (variations useful-fragment)  ;; TODO fix this.
         translation     (translation useful-fragment)
         examples        (examples-and-attestations useful-fragment)]
-    (DictionaryEntry. headword part-of-speech variations translation examples)))
+    (DictionaryEntry. headword part-of-speech translation examples)))
 
 ;; TODO it would be nicer just to do this in the body of `entry-from-hickory`
 ;; using `letfn`.
