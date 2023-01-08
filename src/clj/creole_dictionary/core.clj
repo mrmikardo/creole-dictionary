@@ -163,8 +163,9 @@
         examples        (examples-and-attestations useful-fragment)]
     (DictionaryEntry. headword part-of-speech variations translation examples)))
 
-;; TODO it would be nicer just to do this in the boey of `entry-from-hickory`
+;; TODO it would be nicer just to do this in the body of `entry-from-hickory`
 ;; using `letfn`.
+;; TODO 23-01-08: I am no longer sure what the purpose of this function is...
 (defn parse [fragment]
   (map entry-from-hickory fragment))
 
