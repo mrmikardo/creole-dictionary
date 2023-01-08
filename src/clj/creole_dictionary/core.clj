@@ -153,6 +153,18 @@
        (partition 2)  ;; Group each example with its English rendering.
        (mapv parse-example)))
 
+(defn useful-fragment
+  "Takes a fragment of the HTML dictionary parsed into hickory and returns the useful part."
+  [hickory-fragment]
+  (-> hickory-fragment
+      (:content)
+      (first)
+      (:content)
+      (second)
+      (:content)
+      (first)
+      (:content)))
+
 (defn entry-from-hickory
   "Takes a fragment parsed into hickory and munges to a DictionaryEntry."
   [hickory-fragment]
